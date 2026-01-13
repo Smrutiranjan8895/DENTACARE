@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DentaCare Pro | Services</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="bg-blobs">
+    <span class="blob b1"></span>
+    <span class="blob b2"></span>
+    <span class="blob b3"></span>
+  </div>
+
+  <header class="navbar">
+    <div class="logo">DentaCare<span>Pro</span></div>
+
+    <nav class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="services.html" class="active">Services</a>
+      <a href="contact.html">Contact</a>
+      <button class="btn primary nav-btn" onclick="bookNow()">Book Now</button>
+    </nav>
+
+    <div class="hamburger" onclick="toggleMenu()">
+      <div></div><div></div><div></div>
+    </div>
+  </header>
+
+  <section class="page-header animate fade-in">
+    <h1>Our Premium Services</h1>
+    <p>Modern dentistry that feels comfortable and professional 💎</p>
+  </section>
+
+  <section class="services-grid">
+    <div class="service-card premium-card animate slide-up">
+      <img src="images/img7.png" alt="AI generated teeth whitening" loading="lazy">
+      <h3>Teeth Whitening</h3>
+      <p>Brighten your smile instantly with safe whitening methods.</p>
+      <button class="btn primary" onclick="serviceAlert('Teeth Whitening')">Choose</button>
+    </div>
+
+    <div class="service-card premium-card animate slide-up">
+      <img src="images/img8.png" alt="AI generated aligners" loading="lazy">
+      <h3>Braces & Aligners</h3>
+      <p>Invisible aligners + braces for perfect teeth alignment.</p>
+      <button class="btn primary" onclick="serviceAlert('Braces & Aligners')">Choose</button>
+    </div>
+
+    <div class="service-card premium-card animate slide-up">
+      <img src="images/img9.png" alt="AI generated root canal" loading="lazy">
+      <h3>Root Canal</h3>
+      <p>Painless root canal treatment with advanced techniques.</p>
+      <button class="btn primary" onclick="serviceAlert('Root Canal')">Choose</button>
+    </div>
+
+    <div class="service-card premium-card animate slide-up">
+      <img src="images/img10.png" alt="AI generated cosmetic dentistry" loading="lazy">
+      <h3>Cosmetic Dentistry</h3>
+      <p>Smile transformation with premium cosmetic solutions.</p>
+      <button class="btn primary" onclick="serviceAlert('Cosmetic Dentistry')">Choose</button>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>© 2026 DentaCare Pro | Project by Smruti Ranjan 🚀</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

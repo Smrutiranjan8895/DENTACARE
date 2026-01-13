@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DentaCare Pro | Premium Dental Clinic</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Background Effects -->
+  <div class="bg-blobs">
+    <span class="blob b1"></span>
+    <span class="blob b2"></span>
+    <span class="blob b3"></span>
+  </div>
+
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="logo">DentaCare<span>Pro</span></div>
+
+    <nav class="nav-links" id="navLinks">
+      <a href="index.html" class="active">Home</a>
+      <a href="about.html">About</a>
+      <a href="services.html">Services</a>
+      <a href="contact.html">Contact</a>
+      <button class="btn primary nav-btn" onclick="bookNow()">Book Now</button>
+    </nav>
+
+    <div class="hamburger" onclick="toggleMenu()">
+      <div></div><div></div><div></div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero premium-hero">
+    <div class="hero-content animate fade-in">
+      <div class="chip">✨ AI Assisted Dental Care • 2026</div>
+      <h1>Transform Your Smile With <span>Next-Gen Dental Care</span></h1>
+      <p>
+        Premium treatment experience with modern diagnosis, painless care,
+        and a clinic designed for comfort.
+      </p>
+
+      <div class="hero-buttons">
+        <button class="btn primary" onclick="bookNow()">Get Appointment</button>
+        <button class="btn outline" onclick="scrollToSection('video')">Watch Tour</button>
+      </div>
+
+      <div class="stats">
+        <div class="stat-card">
+          <h2>15K+</h2>
+          <p>Happy Patients</p>
+        </div>
+        <div class="stat-card">
+          <h2>24/7</h2>
+          <p>Emergency Help</p>
+        </div>
+        <div class="stat-card">
+          <h2>98%</h2>
+          <p>Success Rate</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-media animate slide-up">
+      <img
+        src="images/img1.png"
+        alt="AI generated premium dental clinic"
+        class="hero-img"
+        loading="lazy"
+      />
+      <div class="floating-card">
+        <h3>⭐ Premium Care Promise</h3>
+        <p>Comfortable treatment + modern tech + friendly experts.</p>
+        <button class="btn tiny" onclick="showOffer()">Get Offer</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI Image Gallery -->
+  <section class="gallery">
+    <h2 class="section-title animate fade-in">Premium Clinic Experience</h2>
+
+    <div class="gallery-grid">
+      <div class="gallery-card animate slide-up">
+        <img src="images/img2.png" alt="AI generated modern clinic" loading="lazy" />
+        <div class="overlay">Modern Clinic Setup</div>
+      </div>
+
+      <div class="gallery-card animate slide-up">
+        <img src="images/img3.png" alt="AI generated procedure" loading="lazy" />
+        <div class="overlay">Painless Procedure</div>
+      </div>
+
+      <div class="gallery-card animate slide-up">
+        <img src="images/img4.png" alt="AI generated expert consult" loading="lazy" />
+        <div class="overlay">Expert Dentistry</div>
+      </div>
+
+      <div class="gallery-card animate slide-up">
+        <img src="images/img5.png" alt="AI generated smile makeover" loading="lazy" />
+        <div class="overlay">Smile Transformation</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Video Section -->
+  <section class="video-section" id="video">
+    <div class="section-header animate fade-in">
+      <div class="chip">🎥 3-min Clinic Walkthrough</div>
+      <h2 class="section-title">Take a Quick Clinic Tour</h2>
+      <p class="section-subtitle">Stream the walkthrough right here—no new tab, just press play.</p>
+    </div>
+
+    <div class="video-card animate slide-up">
+      <div class="video-meta">
+        <span class="live-dot"></span>
+        Ultra HD • Modern Facility • Patient Journey
+      </div>
+      <div class="video-wrapper">
+        <iframe
+          src="https://www.youtube.com/embed/YskBfrzwgkQ?rel=0&modestbranding=1&showinfo=0&color=white"
+          title="DentaCare Pro Clinic Tour"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen
+          loading="lazy"
+        ></iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services Preview -->
+  <section class="features">
+    <h2 class="section-title animate fade-in">Our Signature Services</h2>
+
+    <div class="feature-grid">
+      <div class="feature-card premium-card animate slide-up">
+        <h3>🦷 Teeth Whitening</h3>
+        <p>Instant glow-up with safe whitening sessions.</p>
+        <button class="btn tiny" onclick="serviceAlert('Teeth Whitening')">Select</button>
+      </div>
+
+      <div class="feature-card premium-card animate slide-up">
+        <h3>😁 Braces & Aligners</h3>
+        <p>Invisible aligners for perfect alignment.</p>
+        <button class="btn tiny" onclick="serviceAlert('Braces & Aligners')">Select</button>
+      </div>
+
+      <div class="feature-card premium-card animate slide-up">
+        <h3>✨ Cosmetic Dentistry</h3>
+        <p>Smile makeover with premium techniques.</p>
+        <button class="btn tiny" onclick="serviceAlert('Cosmetic Dentistry')">Select</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section class="pricing">
+    <h2 class="section-title animate fade-in">Affordable Premium Plans</h2>
+    <div class="pricing-grid">
+
+      <div class="price-card animate slide-up">
+        <h3>Starter</h3>
+        <p class="price">₹499</p>
+        <ul>
+          <li>✅ Basic Checkup</li>
+          <li>✅ Consultation</li>
+          <li>✅ Oral Hygiene Tips</li>
+        </ul>
+        <button class="btn outline" onclick="buyPlan('Starter')">Choose</button>
+      </div>
+
+      <div class="price-card highlight animate slide-up">
+        <h3>Premium</h3>
+        <p class="price">₹1499</p>
+        <ul>
+          <li>✅ Checkup + Cleaning</li>
+          <li>✅ X-Ray Support</li>
+          <li>✅ Dentist Follow Up</li>
+        </ul>
+        <button class="btn primary" onclick="buyPlan('Premium')">Choose</button>
+      </div>
+
+      <div class="price-card animate slide-up">
+        <h3>Elite</h3>
+        <p class="price">₹2999</p>
+        <ul>
+          <li>✅ Cosmetic Consultation</li>
+          <li>✅ Whitening Session</li>
+          <li>✅ Priority Booking</li>
+        </ul>
+        <button class="btn outline" onclick="buyPlan('Elite')">Choose</button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq">
+    <h2 class="section-title animate fade-in">FAQs</h2>
+
+    <div class="faq-box animate slide-up">
+      <button class="faq-q" onclick="toggleFAQ(this)">
+        Is the treatment painless? ✅
+        <span>+</span>
+      </button>
+      <div class="faq-a">
+        Yes! We use modern tools and painless techniques for maximum comfort.
+      </div>
+    </div>
+
+    <div class="faq-box animate slide-up">
+      <button class="faq-q" onclick="toggleFAQ(this)">
+        Do you provide emergency support? 🚑
+        <span>+</span>
+      </button>
+      <div class="faq-a">
+        Yes, we provide 24/7 emergency assistance and quick appointments.
+      </div>
+    </div>
+
+    <div class="faq-box animate slide-up">
+      <button class="faq-q" onclick="toggleFAQ(this)">
+        Can I book online? 📅
+        <span>+</span>
+      </button>
+      <div class="faq-a">
+        Yes! Just click Book Now and we will confirm your slot.
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>© 2026 DentaCare Pro | Project by Smruti Ranjan 🚀</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

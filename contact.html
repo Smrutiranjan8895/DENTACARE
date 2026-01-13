@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DentaCare Pro | Contact</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="bg-blobs">
+    <span class="blob b1"></span>
+    <span class="blob b2"></span>
+    <span class="blob b3"></span>
+  </div>
+
+  <header class="navbar">
+    <div class="logo">DentaCare<span>Pro</span></div>
+
+    <nav class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="services.html">Services</a>
+      <a href="contact.html" class="active">Contact</a>
+      <button class="btn primary nav-btn" onclick="bookNow()">Book Now</button>
+    </nav>
+
+    <div class="hamburger" onclick="toggleMenu()">
+      <div></div><div></div><div></div>
+    </div>
+  </header>
+
+  <section class="page-header animate fade-in">
+    <h1>Contact Us</h1>
+    <p>We respond fast ⚡ Your smile matters 💙</p>
+  </section>
+
+  <section class="contact-section">
+    <div class="contact-info animate slide-up">
+      <h2>Clinic Details</h2>
+      <p><b>📍 Address:</b> Bhubaneswar, Odisha</p>
+      <p><b>📞 Phone:</b> +91 98765 43210</p>
+      <p><b>📧 Email:</b> dentacarepro@gmail.com</p>
+
+      <div class="mini-cards">
+        <div class="mini-card">⏰ 9AM - 9PM</div>
+        <div class="mini-card">🚑 Emergency 24/7</div>
+        <div class="mini-card">⭐ Rated 4.9/5</div>
+      </div>
+
+      <button class="btn outline" onclick="callNow()">Call Now</button>
+    </div>
+
+    <form class="contact-form animate slide-up" onsubmit="sendMessage(event)">
+      <h2>Send Message</h2>
+
+      <input type="text" id="name" placeholder="Enter your name" required />
+      <input type="email" id="email" placeholder="Enter your email" required />
+      <textarea id="message" placeholder="Enter your message" required></textarea>
+
+      <button type="submit" class="btn primary">Send Message</button>
+      <p class="form-note">✅ You’ll get a response within 2 hours</p>
+    </form>
+  </section>
+
+  <footer class="footer">
+    <p>© 2026 DentaCare Pro |  Project by Smruti Ranjan 🚀</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
