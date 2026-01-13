@@ -1,6 +1,9 @@
 # DentaCare Pro
 
+live link 🔗: https://dentacarepro.netlify.app/
+
 Premium multi-page landing site for a modern dental clinic. Includes hero, gallery, service highlights, pricing, FAQs, and dedicated About/Services/Contact pages with light interactivity.
+
 
 ## Features
 - Animated hero with floating card, stats, and CTA buttons
