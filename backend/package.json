@@ -1,0 +1,21 @@
+{
+  "name": "dentacare-backend",
+  "version": "1.0.0",
+  "description": "Serverless backend for Dentacare with JWT auth and uploads",
+  "main": "src/handlers/auth.js",
+  "license": "MIT",
+  "scripts": {
+    "deploy": "serverless deploy",
+    "info": "serverless info",
+    "package": "serverless package"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "serverless": "^3.38.0",
+    "serverless-iam-roles-per-function": "^3.2.0"
+  }
+}

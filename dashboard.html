@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DentaCare | Dashboard</title>
+  <link rel="stylesheet" href="../style.css" />
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="logo">DentaCare</div>
+    <button class="btn outline" onclick="logout()">Logout</button>
+  </header>
+
+  <section class="dashboard">
+    <h1>Welcome to Dashboard</h1>
+    <p>Manage Appointments (Serverless CRUD)</p>
+
+    <!-- CREATE -->
+    <div class="card">
+      <h2>Add Appointment</h2>
+      <input type="text" id="name" placeholder="Patient Name" />
+      <input type="date" id="date" />
+      <input type="text" id="service" placeholder="Service" />
+      <button class="btn primary" onclick="addAppointment()">Add</button>
+    </div>
+
+    <!-- READ -->
+    <div class="card">
+      <h2>Appointments</h2>
+      <ul id="appointmentList"></ul>
+    </div>
+  </section>
+
+  <script src="config.js"></script>
+  <script src="api.js"></script>
+  <script src="dashboard.js"></script>
+</body>
+</html>

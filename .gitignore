@@ -1,0 +1,11 @@
+# Node and build artifacts
+node_modules/
+dentacare-website/
+
+# Local tooling and temp
+policy.json
+.DS_Store
+npm-debug.log*
+serverless-state.json
+.terraform/
+.aws/

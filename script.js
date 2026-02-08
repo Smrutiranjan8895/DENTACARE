@@ -64,13 +64,40 @@ function callNow() {
   alert("📞 Calling Clinic... (Demo Alert)\nPlease dial: +91 98765 43210");
 }
 
-function sendMessage(event) {
+async function sendMessage(event) {
   event.preventDefault();
 
   const name = document.getElementById("name").value;
   const email = document.getElementById("email").value;
+  const message = document.getElementById("message").value;
 
-  alert(`✅ Message Sent Successfully!\n\nName: ${name}\nEmail: ${email}\n\nWe’ll contact you soon 😊`);
+  try {
+    const btn = event.target.querySelector('button[type="submit"]');
+    const originalText = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = "Sending...";
 
-  event.target.reset();
+    // Check if API functions are available
+    if (typeof apiRequest === 'function' && typeof getEndpoint === 'function') {
+      const response = await apiRequest(getEndpoint('CONTACT'), {
+        method: 'POST',
+        body: JSON.stringify({ name, email, message }),
+        authenticated: false
+      });
+
+      alert(`✅ ${response.message || 'Message sent successfully!'}`);
+    } else {
+      // Fallback for pages without API integration
+      alert(`✅ Message Sent Successfully!\n\nName: ${name}\nEmail: ${email}\n\nWe'll contact you soon 😊`);
+    }
+
+    event.target.reset();
+    btn.disabled = false;
+    btn.textContent = originalText;
+  } catch (error) {
+    alert("❌ Failed to send message: " + error.message);
+    const btn = event.target.querySelector('button[type="submit"]');
+    btn.disabled = false;
+    btn.textContent = "Send Message";
+  }
 }

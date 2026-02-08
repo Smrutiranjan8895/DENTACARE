@@ -1,0 +1,229 @@
+service: dentacare-backend
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: ap-south-1
+  stage: ${opt:stage, 'dev'}
+  environment:
+    USERS_TABLE: ${self:custom.usersTableName}
+    UPLOAD_BUCKET: ${self:custom.uploadBucketName}
+    APPOINTMENTS_TABLE: ${self:custom.appointmentsTableName}
+    CONTACTS_TABLE: ${self:custom.contactsTableName}
+    JWT_SECRET: ${env:JWT_SECRET}
+
+plugins:
+  - serverless-iam-roles-per-function
+
+custom:
+  usersTableName: ${self:service}-${self:provider.stage}-users
+  uploadBucketName: ${self:service}-${self:provider.stage}-${self:provider.region}-uploads
+  appointmentsTableName: ${self:service}-${self:provider.stage}-appointments
+  contactsTableName: ${self:service}-${self:provider.stage}-contacts
+
+functions:
+  signup:
+    handler: src/handlers/auth.signup
+    events:
+      - http:
+          path: signup
+          method: post
+          cors: true
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:PutItem
+          - dynamodb:GetItem
+        Resource:
+          - arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.usersTableName}
+
+  login:
+    handler: src/handlers/auth.login
+    events:
+      - http:
+          path: login
+          method: post
+          cors: true
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:GetItem
+        Resource:
+          - arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.usersTableName}
+
+  upload:
+    handler: src/handlers/upload.handleUpload
+    events:
+      - http:
+          path: upload
+          method: post
+          cors: true
+          authorizer:
+            name: jwtAuthorizer
+            type: request
+            resultTtlInSeconds: 0
+            identitySource: method.request.header.Authorization
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - s3:PutObject
+        Resource:
+          - arn:aws:s3:::${self:custom.uploadBucketName}/*
+
+  jwtAuthorizer:
+    handler: src/handlers/auth.jwtAuthorizer
+    iamRoleStatements: []
+
+  root:
+    handler: src/handlers/root.handle
+    events:
+      - http:
+          path: /
+          method: any
+          cors: true
+      - http:
+          path: '{proxy+}'
+          method: any
+          cors: true
+    iamRoleStatements: []
+
+  listAppointments:
+    handler: src/handlers/appointments.list
+    events:
+      - http:
+          path: appointments
+          method: get
+          cors: true
+          authorizer:
+            name: jwtAuthorizer
+            type: request
+            resultTtlInSeconds: 0
+            identitySource: method.request.header.Authorization
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource:
+          - arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.appointmentsTableName}
+
+  createAppointment:
+    handler: src/handlers/appointments.create
+    events:
+      - http:
+          path: appointments
+          method: post
+          cors: true
+          authorizer:
+            name: jwtAuthorizer
+            type: request
+            resultTtlInSeconds: 0
+            identitySource: method.request.header.Authorization
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:PutItem
+        Resource:
+          - arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.appointmentsTableName}
+
+  deleteAppointment:
+    handler: src/handlers/appointments.remove
+    events:
+      - http:
+          path: appointments/{id}
+          method: delete
+          cors: true
+          authorizer:
+            name: jwtAuthorizer
+            type: request
+            resultTtlInSeconds: 0
+            identitySource: method.request.header.Authorization
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:DeleteItem
+        Resource:
+          - arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.appointmentsTableName}
+
+  contactSubmit:
+    handler: src/handlers/contact.submit
+    events:
+      - http:
+          path: contact
+          method: post
+          cors: true
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:PutItem
+        Resource:
+          - arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.contactsTableName}
+
+resources:
+  Resources:
+    UsersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.usersTableName}
+        AttributeDefinitions:
+          - AttributeName: email
+            AttributeType: S
+        KeySchema:
+          - AttributeName: email
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+
+    UploadBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:custom.uploadBucketName}
+        CorsConfiguration:
+          CorsRules:
+            - AllowedOrigins:
+                - '*'
+              AllowedHeaders:
+                - '*'
+              AllowedMethods:
+                - GET
+                - PUT
+                - POST
+              MaxAge: 3000
+        PublicAccessBlockConfiguration:
+          BlockPublicAcls: true
+          BlockPublicPolicy: true
+          IgnorePublicAcls: true
+          RestrictPublicBuckets: true
+
+    AppointmentsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.appointmentsTableName}
+        AttributeDefinitions:
+          - AttributeName: userEmail
+            AttributeType: S
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: userEmail
+            KeyType: HASH
+          - AttributeName: id
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+
+    ContactsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.contactsTableName}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+
+  Outputs:
+    UsersTableName:
+      Value: ${self:custom.usersTableName}
+    UploadBucketName:
+      Value: ${self:custom.uploadBucketName}

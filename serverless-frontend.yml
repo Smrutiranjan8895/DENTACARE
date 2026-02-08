@@ -1,0 +1,42 @@
+service: dentacare-frontend
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  region: ap-south-1
+  stage: ${opt:stage, 'dev'}
+  deploymentMethod: direct
+
+org: smrutiranjan8895
+app: dentacare-frontend
+
+plugins:
+  - serverless-finch
+
+custom:
+  client:
+    bucketName: dentacare-frontend-ap-south-1-84c2f1
+    distributionFolder: ../
+    indexDocument: index.html
+    errorDocument: index.html
+    objectHeaders:
+      ALL_OBJECTS:
+        - name: Cache-Control
+          value: max-age=300
+
+resources:
+  Resources:
+    FrontendBucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        Bucket: ${self:custom.client.bucketName}
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Sid: PublicReadGetObject
+              Effect: Allow
+              Principal: '*'
+              Action:
+                - s3:GetObject
+              Resource:
+                - arn:aws:s3:::${self:custom.client.bucketName}/*
