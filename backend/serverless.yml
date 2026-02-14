@@ -1,5 +1,6 @@
 service: dentacare-backend
 frameworkVersion: '3'
+useDotenv: true
 
 provider:
   name: aws
@@ -7,6 +8,8 @@ provider:
   region: ap-south-1
   stage: ${opt:stage, 'dev'}
   environment:
+    USER_POOL_ID: { Ref: CognitoUserPool }
+    USER_POOL_CLIENT_ID: { Ref: CognitoUserPoolClient }
     USERS_TABLE: ${self:custom.usersTableName}
     UPLOAD_BUCKET: ${self:custom.uploadBucketName}
     APPOINTMENTS_TABLE: ${self:custom.appointmentsTableName}
@@ -14,11 +17,12 @@ provider:
     JWT_SECRET: ${env:JWT_SECRET}
 
 plugins:
+  - serverless-dotenv-plugin
   - serverless-iam-roles-per-function
 
 custom:
   usersTableName: ${self:service}-${self:provider.stage}-users
-  uploadBucketName: ${self:service}-${self:provider.stage}-${self:provider.region}-uploads
+  uploadBucketName: ${self:service}-${self:provider.stage}-uploads-${aws:accountId}
   appointmentsTableName: ${self:service}-${self:provider.stage}-appointments
   contactsTableName: ${self:service}-${self:provider.stage}-contacts
 
@@ -35,8 +39,10 @@ functions:
         Action:
           - dynamodb:PutItem
           - dynamodb:GetItem
+          - cognito-idp:SignUp
         Resource:
           - arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.usersTableName}
+          - arn:aws:cognito-idp:${self:provider.region}:${aws:accountId}:userpool/*
 
   login:
     handler: src/handlers/auth.login
@@ -49,8 +55,24 @@ functions:
       - Effect: Allow
         Action:
           - dynamodb:GetItem
+          - cognito-idp:InitiateAuth
         Resource:
           - arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.usersTableName}
+          - arn:aws:cognito-idp:${self:provider.region}:${aws:accountId}:userpool/*
+
+  confirm:
+    handler: src/handlers/auth.confirm
+    events:
+      - http:
+          path: confirm
+          method: post
+          cors: true
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - cognito-idp:ConfirmSignUp
+        Resource:
+          - arn:aws:cognito-idp:${self:provider.region}:${aws:accountId}:userpool/*
 
   upload:
     handler: src/handlers/upload.handleUpload
@@ -60,10 +82,10 @@ functions:
           method: post
           cors: true
           authorizer:
-            name: jwtAuthorizer
-            type: request
-            resultTtlInSeconds: 0
-            identitySource: method.request.header.Authorization
+            name: cognitoAuthorizer
+            type: COGNITO_USER_POOLS
+            arn:
+              Fn::GetAtt: [CognitoUserPool, Arn]
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -96,10 +118,10 @@ functions:
           method: get
           cors: true
           authorizer:
-            name: jwtAuthorizer
-            type: request
-            resultTtlInSeconds: 0
-            identitySource: method.request.header.Authorization
+            name: cognitoAuthorizer
+            type: COGNITO_USER_POOLS
+            arn:
+              Fn::GetAtt: [CognitoUserPool, Arn]
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -115,14 +137,15 @@ functions:
           method: post
           cors: true
           authorizer:
-            name: jwtAuthorizer
-            type: request
-            resultTtlInSeconds: 0
-            identitySource: method.request.header.Authorization
+            name: cognitoAuthorizer
+            type: COGNITO_USER_POOLS
+            arn:
+              Fn::GetAtt: [CognitoUserPool, Arn]
     iamRoleStatements:
       - Effect: Allow
         Action:
           - dynamodb:PutItem
+          - dynamodb:Scan
         Resource:
           - arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.appointmentsTableName}
 
@@ -134,10 +157,10 @@ functions:
           method: delete
           cors: true
           authorizer:
-            name: jwtAuthorizer
-            type: request
-            resultTtlInSeconds: 0
-            identitySource: method.request.header.Authorization
+            name: cognitoAuthorizer
+            type: COGNITO_USER_POOLS
+            arn:
+              Fn::GetAtt: [CognitoUserPool, Arn]
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -222,8 +245,42 @@ resources:
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
 
+    CognitoUserPool:
+      Type: AWS::Cognito::UserPool
+      Properties:
+        UserPoolName: ${self:service}-${self:provider.stage}-user-pool
+        UsernameAttributes:
+          - email
+        AutoVerifiedAttributes:
+          - email
+        Policies:
+          PasswordPolicy:
+            MinimumLength: 8
+            RequireUppercase: true
+            RequireLowercase: true
+            RequireNumbers: true
+            RequireSymbols: false
+
+    CognitoUserPoolClient:
+      Type: AWS::Cognito::UserPoolClient
+      Properties:
+        ClientName: ${self:service}-${self:provider.stage}-web
+        UserPoolId: { Ref: CognitoUserPool }
+        GenerateSecret: false
+        ExplicitAuthFlows:
+          - ALLOW_USER_PASSWORD_AUTH
+          - ALLOW_REFRESH_TOKEN_AUTH
+          - ALLOW_USER_SRP_AUTH
+        PreventUserExistenceErrors: ENABLED
+        SupportedIdentityProviders:
+          - COGNITO
+
   Outputs:
     UsersTableName:
       Value: ${self:custom.usersTableName}
     UploadBucketName:
       Value: ${self:custom.uploadBucketName}
+    CognitoUserPoolId:
+      Value: { Ref: CognitoUserPool }
+    CognitoUserPoolClientId:
+      Value: { Ref: CognitoUserPoolClient }

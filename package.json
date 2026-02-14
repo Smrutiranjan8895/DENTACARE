@@ -1,5 +1,9 @@
 {
+  "scripts": {
+    "build:env": "node scripts/inject-env.js"
+  },
   "devDependencies": {
+    "dotenv": "^16.4.5",
     "serverless": "^3.40.0",
     "serverless-finch": "^4.0.4"
   }

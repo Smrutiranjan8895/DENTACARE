@@ -11,11 +11,13 @@
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "aws-sdk": "^2.1487.0",
     "jsonwebtoken": "^9.0.2",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
     "serverless": "^3.38.0",
-    "serverless-iam-roles-per-function": "^3.2.0"
+    "serverless-iam-roles-per-function": "^3.2.0",
+    "serverless-dotenv-plugin": "^6.0.0"
   }
 }

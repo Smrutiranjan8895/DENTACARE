@@ -14,7 +14,10 @@ const parseBody = (event) => {
 };
 
 const getUserEmail = (event) => {
-  return (event.requestContext && event.requestContext.authorizer && event.requestContext.authorizer.email) || null;
+  const auth = event.requestContext && event.requestContext.authorizer;
+  if (!auth) return null;
+  const claims = auth.claims || {};
+  return claims.email || claims['cognito:username'] || auth.email || null;
 };
 
 // List appointments for logged-in user
@@ -47,17 +50,34 @@ module.exports.create = async (event) => {
     return buildResponse(401, { message: 'Unauthorized' });
   }
 
-  const { name, date, service } = parseBody(event);
-  if (!name || !date || !service) {
-    return buildResponse(400, { message: 'name, date, and service are required' });
+  const { name, date, time, service } = parseBody(event);
+  if (!name || !date || !time || !service) {
+    return buildResponse(400, { message: 'name, date, time, and service are required' });
   }
 
+  const slotKey = `${date}#${time}`;
+
   try {
+    // Prevent double booking: check if slot already exists for any user
+    const existing = await dynamo.scan({
+      TableName: APPOINTMENTS_TABLE,
+      FilterExpression: '#slot = :slot',
+      ExpressionAttributeNames: { '#slot': 'slot' },
+      ExpressionAttributeValues: { ':slot': slotKey },
+      Limit: 1
+    }).promise();
+
+    if (existing.Items && existing.Items.length > 0) {
+      return buildResponse(409, { message: 'Time slot already booked' });
+    }
+
     const appointment = {
       id: uuidv4(),
       userEmail: email,
       name,
       date,
+      time,
+      slot: slotKey,
       service,
       createdAt: new Date().toISOString()
     };

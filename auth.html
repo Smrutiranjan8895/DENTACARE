@@ -93,6 +93,7 @@
     <div class="auth-box hidden" id="signupBox">
       <h2>Create Account</h2>
       <form onsubmit="event.preventDefault(); signup();">
+        <input type="text" id="signupName" placeholder="Full Name" required />
         <input type="email" id="signupEmail" placeholder="Email" required />
         <input type="password" id="signupPassword" placeholder="Password (min 6 chars)" required />
         <input type="password" id="confirmPassword" placeholder="Confirm Password" required />
@@ -100,6 +101,21 @@
       </form>
       <div class="auth-toggle">
         Already have an account? <a onclick="showLogin()">Login</a>
+        <br />Have a code? <a onclick="showConfirm()">Verify email</a>
+      </div>
+    </div>
+
+    <!-- Confirm Form -->
+    <div class="auth-box hidden" id="confirmBox">
+      <h2>Verify Email</h2>
+      <form onsubmit="event.preventDefault(); confirmAccount();">
+        <input type="email" id="confirmEmail" placeholder="Email" required />
+        <input type="text" id="confirmCode" placeholder="Verification Code" required />
+        <button type="submit" class="btn primary" style="width: 100%;">Verify</button>
+      </form>
+      <div class="auth-toggle">
+        Need to signup? <a onclick="showSignup()">Create account</a>
+        <br />Remembered password? <a onclick="showLogin()">Login</a>
       </div>
     </div>
   </section>
@@ -108,6 +124,7 @@
     <p>© 2026 DentaCare Pro | Project by Smruti Ranjan 🚀</p>
   </footer>
 
+  <script src="env.js"></script>
   <script src="config.js"></script>
   <script src="api.js"></script>
   <script src="auth.js"></script>
@@ -115,11 +132,22 @@
     function showLogin() {
       document.getElementById('loginBox').classList.remove('hidden');
       document.getElementById('signupBox').classList.add('hidden');
+      document.getElementById('confirmBox').classList.add('hidden');
     }
     
     function showSignup() {
       document.getElementById('loginBox').classList.add('hidden');
       document.getElementById('signupBox').classList.remove('hidden');
+      document.getElementById('confirmBox').classList.add('hidden');
+    }
+
+    function showConfirm(prefillEmail) {
+      if (prefillEmail) {
+        document.getElementById('confirmEmail').value = prefillEmail;
+      }
+      document.getElementById('loginBox').classList.add('hidden');
+      document.getElementById('signupBox').classList.add('hidden');
+      document.getElementById('confirmBox').classList.remove('hidden');
     }
   </script>
 </body>

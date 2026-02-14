@@ -83,6 +83,12 @@
         "LogGroupName": "/aws/lambda/dentacare-backend-dev-login"
       }
     },
+    "ConfirmLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/dentacare-backend-dev-confirm"
+      }
+    },
     "UploadLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
@@ -210,7 +216,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/dentacare-backend/dev/1770544087865-2026-02-08T09:48:07.865Z/dentacare-backend.zip"
+          "S3Key": "serverless/dentacare-backend/dev/1770832816816-2026-02-11T18:00:16.816Z/dentacare-backend.zip"
         },
         "Handler": "src/handlers/auth.signup",
         "Runtime": "nodejs18.x",
@@ -219,8 +225,14 @@
         "Timeout": 6,
         "Environment": {
           "Variables": {
+            "USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "USER_POOL_CLIENT_ID": {
+              "Ref": "CognitoUserPoolClient"
+            },
             "USERS_TABLE": "dentacare-backend-dev-users",
-            "UPLOAD_BUCKET": "dentacare-backend-dev-ap-south-1-uploads",
+            "UPLOAD_BUCKET": "dentacare-backend-dev-uploads-607360609414",
             "APPOINTMENTS_TABLE": "dentacare-backend-dev-appointments",
             "CONTACTS_TABLE": "dentacare-backend-dev-contacts",
             "JWT_SECRET": "2414533ef29a857f8b024dea0e447860356b9e3033bfca1d3b1eebc0b6b2951e"
@@ -245,7 +257,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/dentacare-backend/dev/1770544087865-2026-02-08T09:48:07.865Z/dentacare-backend.zip"
+          "S3Key": "serverless/dentacare-backend/dev/1770832816816-2026-02-11T18:00:16.816Z/dentacare-backend.zip"
         },
         "Handler": "src/handlers/auth.login",
         "Runtime": "nodejs18.x",
@@ -254,8 +266,14 @@
         "Timeout": 6,
         "Environment": {
           "Variables": {
+            "USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "USER_POOL_CLIENT_ID": {
+              "Ref": "CognitoUserPoolClient"
+            },
             "USERS_TABLE": "dentacare-backend-dev-users",
-            "UPLOAD_BUCKET": "dentacare-backend-dev-ap-south-1-uploads",
+            "UPLOAD_BUCKET": "dentacare-backend-dev-uploads-607360609414",
             "APPOINTMENTS_TABLE": "dentacare-backend-dev-appointments",
             "CONTACTS_TABLE": "dentacare-backend-dev-contacts",
             "JWT_SECRET": "2414533ef29a857f8b024dea0e447860356b9e3033bfca1d3b1eebc0b6b2951e"
@@ -273,6 +291,47 @@
         "LoginLogGroup"
       ]
     },
+    "ConfirmLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/dentacare-backend/dev/1770832816816-2026-02-11T18:00:16.816Z/dentacare-backend.zip"
+        },
+        "Handler": "src/handlers/auth.confirm",
+        "Runtime": "nodejs18.x",
+        "FunctionName": "dentacare-backend-dev-confirm",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "USER_POOL_CLIENT_ID": {
+              "Ref": "CognitoUserPoolClient"
+            },
+            "USERS_TABLE": "dentacare-backend-dev-users",
+            "UPLOAD_BUCKET": "dentacare-backend-dev-uploads-607360609414",
+            "APPOINTMENTS_TABLE": "dentacare-backend-dev-appointments",
+            "CONTACTS_TABLE": "dentacare-backend-dev-contacts",
+            "JWT_SECRET": "2414533ef29a857f8b024dea0e447860356b9e3033bfca1d3b1eebc0b6b2951e"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "ConfirmIamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "ConfirmIamRoleLambdaExecution",
+        "ConfirmLogGroup"
+      ]
+    },
     "UploadLambdaFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
@@ -280,7 +339,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/dentacare-backend/dev/1770544087865-2026-02-08T09:48:07.865Z/dentacare-backend.zip"
+          "S3Key": "serverless/dentacare-backend/dev/1770832816816-2026-02-11T18:00:16.816Z/dentacare-backend.zip"
         },
         "Handler": "src/handlers/upload.handleUpload",
         "Runtime": "nodejs18.x",
@@ -289,8 +348,14 @@
         "Timeout": 6,
         "Environment": {
           "Variables": {
+            "USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "USER_POOL_CLIENT_ID": {
+              "Ref": "CognitoUserPoolClient"
+            },
             "USERS_TABLE": "dentacare-backend-dev-users",
-            "UPLOAD_BUCKET": "dentacare-backend-dev-ap-south-1-uploads",
+            "UPLOAD_BUCKET": "dentacare-backend-dev-uploads-607360609414",
             "APPOINTMENTS_TABLE": "dentacare-backend-dev-appointments",
             "CONTACTS_TABLE": "dentacare-backend-dev-contacts",
             "JWT_SECRET": "2414533ef29a857f8b024dea0e447860356b9e3033bfca1d3b1eebc0b6b2951e"
@@ -315,7 +380,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/dentacare-backend/dev/1770544087865-2026-02-08T09:48:07.865Z/dentacare-backend.zip"
+          "S3Key": "serverless/dentacare-backend/dev/1770832816816-2026-02-11T18:00:16.816Z/dentacare-backend.zip"
         },
         "Handler": "src/handlers/auth.jwtAuthorizer",
         "Runtime": "nodejs18.x",
@@ -324,8 +389,14 @@
         "Timeout": 6,
         "Environment": {
           "Variables": {
+            "USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "USER_POOL_CLIENT_ID": {
+              "Ref": "CognitoUserPoolClient"
+            },
             "USERS_TABLE": "dentacare-backend-dev-users",
-            "UPLOAD_BUCKET": "dentacare-backend-dev-ap-south-1-uploads",
+            "UPLOAD_BUCKET": "dentacare-backend-dev-uploads-607360609414",
             "APPOINTMENTS_TABLE": "dentacare-backend-dev-appointments",
             "CONTACTS_TABLE": "dentacare-backend-dev-contacts",
             "JWT_SECRET": "2414533ef29a857f8b024dea0e447860356b9e3033bfca1d3b1eebc0b6b2951e"
@@ -350,7 +421,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/dentacare-backend/dev/1770544087865-2026-02-08T09:48:07.865Z/dentacare-backend.zip"
+          "S3Key": "serverless/dentacare-backend/dev/1770832816816-2026-02-11T18:00:16.816Z/dentacare-backend.zip"
         },
         "Handler": "src/handlers/root.handle",
         "Runtime": "nodejs18.x",
@@ -359,8 +430,14 @@
         "Timeout": 6,
         "Environment": {
           "Variables": {
+            "USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "USER_POOL_CLIENT_ID": {
+              "Ref": "CognitoUserPoolClient"
+            },
             "USERS_TABLE": "dentacare-backend-dev-users",
-            "UPLOAD_BUCKET": "dentacare-backend-dev-ap-south-1-uploads",
+            "UPLOAD_BUCKET": "dentacare-backend-dev-uploads-607360609414",
             "APPOINTMENTS_TABLE": "dentacare-backend-dev-appointments",
             "CONTACTS_TABLE": "dentacare-backend-dev-contacts",
             "JWT_SECRET": "2414533ef29a857f8b024dea0e447860356b9e3033bfca1d3b1eebc0b6b2951e"
@@ -368,12 +445,13 @@
         },
         "Role": {
           "Fn::GetAtt": [
-            "IamRoleLambdaExecution",
+            "RootIamRoleLambdaExecution",
             "Arn"
           ]
         }
       },
       "DependsOn": [
+        "RootIamRoleLambdaExecution",
         "RootLogGroup"
       ]
     },
@@ -384,7 +462,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/dentacare-backend/dev/1770544087865-2026-02-08T09:48:07.865Z/dentacare-backend.zip"
+          "S3Key": "serverless/dentacare-backend/dev/1770832816816-2026-02-11T18:00:16.816Z/dentacare-backend.zip"
         },
         "Handler": "src/handlers/appointments.list",
         "Runtime": "nodejs18.x",
@@ -393,8 +471,14 @@
         "Timeout": 6,
         "Environment": {
           "Variables": {
+            "USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "USER_POOL_CLIENT_ID": {
+              "Ref": "CognitoUserPoolClient"
+            },
             "USERS_TABLE": "dentacare-backend-dev-users",
-            "UPLOAD_BUCKET": "dentacare-backend-dev-ap-south-1-uploads",
+            "UPLOAD_BUCKET": "dentacare-backend-dev-uploads-607360609414",
             "APPOINTMENTS_TABLE": "dentacare-backend-dev-appointments",
             "CONTACTS_TABLE": "dentacare-backend-dev-contacts",
             "JWT_SECRET": "2414533ef29a857f8b024dea0e447860356b9e3033bfca1d3b1eebc0b6b2951e"
@@ -419,7 +503,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/dentacare-backend/dev/1770544087865-2026-02-08T09:48:07.865Z/dentacare-backend.zip"
+          "S3Key": "serverless/dentacare-backend/dev/1770832816816-2026-02-11T18:00:16.816Z/dentacare-backend.zip"
         },
         "Handler": "src/handlers/appointments.create",
         "Runtime": "nodejs18.x",
@@ -428,8 +512,14 @@
         "Timeout": 6,
         "Environment": {
           "Variables": {
+            "USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "USER_POOL_CLIENT_ID": {
+              "Ref": "CognitoUserPoolClient"
+            },
             "USERS_TABLE": "dentacare-backend-dev-users",
-            "UPLOAD_BUCKET": "dentacare-backend-dev-ap-south-1-uploads",
+            "UPLOAD_BUCKET": "dentacare-backend-dev-uploads-607360609414",
             "APPOINTMENTS_TABLE": "dentacare-backend-dev-appointments",
             "CONTACTS_TABLE": "dentacare-backend-dev-contacts",
             "JWT_SECRET": "2414533ef29a857f8b024dea0e447860356b9e3033bfca1d3b1eebc0b6b2951e"
@@ -454,7 +544,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/dentacare-backend/dev/1770544087865-2026-02-08T09:48:07.865Z/dentacare-backend.zip"
+          "S3Key": "serverless/dentacare-backend/dev/1770832816816-2026-02-11T18:00:16.816Z/dentacare-backend.zip"
         },
         "Handler": "src/handlers/appointments.remove",
         "Runtime": "nodejs18.x",
@@ -463,8 +553,14 @@
         "Timeout": 6,
         "Environment": {
           "Variables": {
+            "USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "USER_POOL_CLIENT_ID": {
+              "Ref": "CognitoUserPoolClient"
+            },
             "USERS_TABLE": "dentacare-backend-dev-users",
-            "UPLOAD_BUCKET": "dentacare-backend-dev-ap-south-1-uploads",
+            "UPLOAD_BUCKET": "dentacare-backend-dev-uploads-607360609414",
             "APPOINTMENTS_TABLE": "dentacare-backend-dev-appointments",
             "CONTACTS_TABLE": "dentacare-backend-dev-contacts",
             "JWT_SECRET": "2414533ef29a857f8b024dea0e447860356b9e3033bfca1d3b1eebc0b6b2951e"
@@ -489,7 +585,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/dentacare-backend/dev/1770544087865-2026-02-08T09:48:07.865Z/dentacare-backend.zip"
+          "S3Key": "serverless/dentacare-backend/dev/1770832816816-2026-02-11T18:00:16.816Z/dentacare-backend.zip"
         },
         "Handler": "src/handlers/contact.submit",
         "Runtime": "nodejs18.x",
@@ -498,8 +594,14 @@
         "Timeout": 6,
         "Environment": {
           "Variables": {
+            "USER_POOL_ID": {
+              "Ref": "CognitoUserPool"
+            },
+            "USER_POOL_CLIENT_ID": {
+              "Ref": "CognitoUserPoolClient"
+            },
             "USERS_TABLE": "dentacare-backend-dev-users",
-            "UPLOAD_BUCKET": "dentacare-backend-dev-ap-south-1-uploads",
+            "UPLOAD_BUCKET": "dentacare-backend-dev-uploads-607360609414",
             "APPOINTMENTS_TABLE": "dentacare-backend-dev-appointments",
             "CONTACTS_TABLE": "dentacare-backend-dev-contacts",
             "JWT_SECRET": "2414533ef29a857f8b024dea0e447860356b9e3033bfca1d3b1eebc0b6b2951e"
@@ -517,94 +619,104 @@
         "ContactSubmitLogGroup"
       ]
     },
-    "SignupLambdaVersionX21KfCcqGTAq3ImDKIg9YbX1WrEwqEVPpE7lwP9ZpM": {
+    "SignupLambdaVersionTNARS8hkExNtvp1idVzqa1lRPoTr5SuoDjnSgn8o": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "SignupLambdaFunction"
         },
-        "CodeSha256": "g8XEjgKCVb85i0z28zfiBSbjyO+6pd+Gzpgfn10u8FE="
+        "CodeSha256": "e+yVX1+s8mM7rZpqvOI07BFOIlosqKSF/B0zTP1qVUE="
       }
     },
-    "LoginLambdaVersionuB28MDozwe5VC8ZnL6DBomSOBGXl716l1t0UMHDE1g": {
+    "LoginLambdaVersiond4p7aYtMoveXNDeklIXvXSziDXs6DlDIlxIpvkTGadw": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "LoginLambdaFunction"
         },
-        "CodeSha256": "g8XEjgKCVb85i0z28zfiBSbjyO+6pd+Gzpgfn10u8FE="
+        "CodeSha256": "e+yVX1+s8mM7rZpqvOI07BFOIlosqKSF/B0zTP1qVUE="
       }
     },
-    "UploadLambdaVersionhMg12FnhbxxzIp8FVdwLtfS11eSfY8YxmcAZDs2bL5Q": {
+    "ConfirmLambdaVersionNzTe5O3LQZ3CrMGySfpt7RhBKPHUboPYZ8LlXsPTk": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "ConfirmLambdaFunction"
+        },
+        "CodeSha256": "e+yVX1+s8mM7rZpqvOI07BFOIlosqKSF/B0zTP1qVUE="
+      }
+    },
+    "UploadLambdaVersion4po2nq6BH9xZdYemM3lkkwZB6jM4ZirE6FlWhmBrRk": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "UploadLambdaFunction"
         },
-        "CodeSha256": "g8XEjgKCVb85i0z28zfiBSbjyO+6pd+Gzpgfn10u8FE="
+        "CodeSha256": "e+yVX1+s8mM7rZpqvOI07BFOIlosqKSF/B0zTP1qVUE="
       }
     },
-    "JwtAuthorizerLambdaVersionsy2T6tvyVbHgrZeyrOm5QOuEJgypNcZa8hrCD6v8": {
+    "JwtAuthorizerLambdaVersiongT4Ds3tQpbEZnxcjsnxE5thhVQcOY72JCDhUsZkmB8": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "JwtAuthorizerLambdaFunction"
         },
-        "CodeSha256": "g8XEjgKCVb85i0z28zfiBSbjyO+6pd+Gzpgfn10u8FE="
+        "CodeSha256": "e+yVX1+s8mM7rZpqvOI07BFOIlosqKSF/B0zTP1qVUE="
       }
     },
-    "RootLambdaVersionHfCXRN9hsaXrYzFiZCW9eiFiyUKenGbOnQT72tqTaE": {
+    "RootLambdaVersiongq160wNpxqxdlGmcKTNda8nHYySum5M7ikD6rtTQ": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "RootLambdaFunction"
         },
-        "CodeSha256": "g8XEjgKCVb85i0z28zfiBSbjyO+6pd+Gzpgfn10u8FE="
+        "CodeSha256": "e+yVX1+s8mM7rZpqvOI07BFOIlosqKSF/B0zTP1qVUE="
       }
     },
-    "ListAppointmentsLambdaVersionWdSTVFkr5UvU0qtGYQlV7eL4gorEKy70e2cfsyVNG0": {
+    "ListAppointmentsLambdaVersionZVGF0oCIh0Jqu96cIRn3ni9QAC7lhVsKYkTno08XpA": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "ListAppointmentsLambdaFunction"
         },
-        "CodeSha256": "g8XEjgKCVb85i0z28zfiBSbjyO+6pd+Gzpgfn10u8FE="
+        "CodeSha256": "e+yVX1+s8mM7rZpqvOI07BFOIlosqKSF/B0zTP1qVUE="
       }
     },
-    "CreateAppointmentLambdaVersiongpmba8YGiMmT5c1XgHkOwwyM3EmdWKyeQkcQ9ZA8": {
+    "CreateAppointmentLambdaVersionncLru8M5IN6uEbWFyAe8RvNgHLtDDixFTt2kbGlb0": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "CreateAppointmentLambdaFunction"
         },
-        "CodeSha256": "g8XEjgKCVb85i0z28zfiBSbjyO+6pd+Gzpgfn10u8FE="
+        "CodeSha256": "e+yVX1+s8mM7rZpqvOI07BFOIlosqKSF/B0zTP1qVUE="
       }
     },
-    "DeleteAppointmentLambdaVersionN6Ai9ucDKHhA5Jj5J2W1EVRKJGuRXb3kHzJZcrPTKbc": {
+    "DeleteAppointmentLambdaVersionpjC0D4ohillE5iVkpQFn2Eeyb70VQlSTSxjcKpag": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "DeleteAppointmentLambdaFunction"
         },
-        "CodeSha256": "g8XEjgKCVb85i0z28zfiBSbjyO+6pd+Gzpgfn10u8FE="
+        "CodeSha256": "e+yVX1+s8mM7rZpqvOI07BFOIlosqKSF/B0zTP1qVUE="
       }
     },
-    "ContactSubmitLambdaVersionxtnfc66kPxO4NUVIsAodpTQKvyelONDfRKtZnwAyKc": {
+    "ContactSubmitLambdaVersionsyjR27tnA5qs0SUyY6PgmjrfTvvGGUwM9IK4srrS90": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "ContactSubmitLambdaFunction"
         },
-        "CodeSha256": "g8XEjgKCVb85i0z28zfiBSbjyO+6pd+Gzpgfn10u8FE="
+        "CodeSha256": "e+yVX1+s8mM7rZpqvOI07BFOIlosqKSF/B0zTP1qVUE="
       }
     },
     "ApiGatewayRestApi": {
@@ -644,6 +756,21 @@
           ]
         },
         "PathPart": "login",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceConfirm": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "ApiGatewayRestApi",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "confirm",
         "RestApiId": {
           "Ref": "ApiGatewayRestApi"
         }
@@ -811,6 +938,51 @@
         }
       }
     },
+    "ApiGatewayMethodConfirmOptions": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true
+            },
+            "ResponseModels": {}
+          }
+        ],
+        "RequestParameters": {},
+        "Integration": {
+          "Type": "MOCK",
+          "RequestTemplates": {
+            "application/json": "{statusCode:200}"
+          },
+          "ContentHandling": "CONVERT_TO_TEXT",
+          "IntegrationResponses": [
+            {
+              "StatusCode": "200",
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+              },
+              "ResponseTemplates": {
+                "application/json": ""
+              }
+            }
+          ]
+        },
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceConfirm"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
     "ApiGatewayMethodUploadOptions": {
       "Type": "AWS::ApiGateway::Method",
       "Properties": {
@@ -898,6 +1070,51 @@
             "ApiGatewayRestApi",
             "RootResourceId"
           ]
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodProxyVarOptions": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true
+            },
+            "ResponseModels": {}
+          }
+        ],
+        "RequestParameters": {},
+        "Integration": {
+          "Type": "MOCK",
+          "RequestTemplates": {
+            "application/json": "{statusCode:200}"
+          },
+          "ContentHandling": "CONVERT_TO_TEXT",
+          "IntegrationResponses": [
+            {
+              "StatusCode": "200",
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,DELETE,GET,HEAD,PATCH,POST,PUT'"
+              },
+              "ResponseTemplates": {
+                "application/json": ""
+              }
+            }
+          ]
+        },
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceProxyVar"
         },
         "RestApiId": {
           "Ref": "ApiGatewayRestApi"
@@ -1131,6 +1348,52 @@
         "LoginLambdaPermissionApiGateway"
       ]
     },
+    "ApiGatewayMethodConfirmPost": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "POST",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceConfirm"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "ConfirmLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      },
+      "DependsOn": [
+        "ConfirmLambdaPermissionApiGateway"
+      ]
+    },
     "ApiGatewayMethodUploadPost": {
       "Type": "AWS::ApiGateway::Method",
       "Properties": {
@@ -1143,9 +1406,9 @@
           "Ref": "ApiGatewayRestApi"
         },
         "ApiKeyRequired": false,
-        "AuthorizationType": "CUSTOM",
+        "AuthorizationType": "COGNITO_USER_POOLS",
         "AuthorizerId": {
-          "Ref": "JwtAuthorizerApiGatewayAuthorizer"
+          "Ref": "CognitoAuthorizerApiGatewayAuthorizer"
         },
         "Integration": {
           "IntegrationHttpMethod": "POST",
@@ -1177,7 +1440,7 @@
         "MethodResponses": []
       },
       "DependsOn": [
-        "JwtAuthorizerApiGatewayAuthorizer"
+        "CognitoAuthorizerApiGatewayAuthorizer"
       ]
     },
     "ApiGatewayMethodAny": {
@@ -1287,9 +1550,9 @@
           "Ref": "ApiGatewayRestApi"
         },
         "ApiKeyRequired": false,
-        "AuthorizationType": "CUSTOM",
+        "AuthorizationType": "COGNITO_USER_POOLS",
         "AuthorizerId": {
-          "Ref": "JwtAuthorizerApiGatewayAuthorizer"
+          "Ref": "CognitoAuthorizerApiGatewayAuthorizer"
         },
         "Integration": {
           "IntegrationHttpMethod": "POST",
@@ -1321,7 +1584,7 @@
         "MethodResponses": []
       },
       "DependsOn": [
-        "JwtAuthorizerApiGatewayAuthorizer"
+        "CognitoAuthorizerApiGatewayAuthorizer"
       ]
     },
     "ApiGatewayMethodAppointmentsPost": {
@@ -1336,9 +1599,9 @@
           "Ref": "ApiGatewayRestApi"
         },
         "ApiKeyRequired": false,
-        "AuthorizationType": "CUSTOM",
+        "AuthorizationType": "COGNITO_USER_POOLS",
         "AuthorizerId": {
-          "Ref": "JwtAuthorizerApiGatewayAuthorizer"
+          "Ref": "CognitoAuthorizerApiGatewayAuthorizer"
         },
         "Integration": {
           "IntegrationHttpMethod": "POST",
@@ -1370,7 +1633,7 @@
         "MethodResponses": []
       },
       "DependsOn": [
-        "JwtAuthorizerApiGatewayAuthorizer"
+        "CognitoAuthorizerApiGatewayAuthorizer"
       ]
     },
     "ApiGatewayMethodAppointmentsIdVarDelete": {
@@ -1385,9 +1648,9 @@
           "Ref": "ApiGatewayRestApi"
         },
         "ApiKeyRequired": false,
-        "AuthorizationType": "CUSTOM",
+        "AuthorizationType": "COGNITO_USER_POOLS",
         "AuthorizerId": {
-          "Ref": "JwtAuthorizerApiGatewayAuthorizer"
+          "Ref": "CognitoAuthorizerApiGatewayAuthorizer"
         },
         "Integration": {
           "IntegrationHttpMethod": "POST",
@@ -1419,7 +1682,7 @@
         "MethodResponses": []
       },
       "DependsOn": [
-        "JwtAuthorizerApiGatewayAuthorizer"
+        "CognitoAuthorizerApiGatewayAuthorizer"
       ]
     },
     "ApiGatewayMethodContactPost": {
@@ -1468,42 +1731,27 @@
         "ContactSubmitLambdaPermissionApiGateway"
       ]
     },
-    "JwtAuthorizerApiGatewayAuthorizer": {
+    "CognitoAuthorizerApiGatewayAuthorizer": {
       "Type": "AWS::ApiGateway::Authorizer",
       "Properties": {
-        "AuthorizerResultTtlInSeconds": 0,
+        "AuthorizerResultTtlInSeconds": 300,
         "IdentitySource": "method.request.header.Authorization",
-        "Name": "jwtAuthorizer",
+        "Name": "cognitoAuthorizer",
         "RestApiId": {
           "Ref": "ApiGatewayRestApi"
         },
-        "AuthorizerUri": {
-          "Fn::Join": [
-            "",
-            [
-              "arn:",
-              {
-                "Ref": "AWS::Partition"
-              },
-              ":apigateway:",
-              {
-                "Ref": "AWS::Region"
-              },
-              ":lambda:path/2015-03-31/functions/",
-              {
-                "Fn::GetAtt": [
-                  "JwtAuthorizerLambdaFunction",
-                  "Arn"
-                ]
-              },
-              "/invocations"
+        "Type": "COGNITO_USER_POOLS",
+        "ProviderARNs": [
+          {
+            "Fn::GetAtt": [
+              "CognitoUserPool",
+              "Arn"
             ]
-          ]
-        },
-        "Type": "REQUEST"
+          }
+        ]
       }
     },
-    "ApiGatewayDeployment1770544059100": {
+    "ApiGatewayDeployment1770832789352": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -1514,13 +1762,16 @@
       "DependsOn": [
         "ApiGatewayMethodSignupOptions",
         "ApiGatewayMethodLoginOptions",
+        "ApiGatewayMethodConfirmOptions",
         "ApiGatewayMethodUploadOptions",
         "ApiGatewayMethodOptions",
+        "ApiGatewayMethodProxyVarOptions",
         "ApiGatewayMethodAppointmentsOptions",
         "ApiGatewayMethodAppointmentsIdVarOptions",
         "ApiGatewayMethodContactOptions",
         "ApiGatewayMethodSignupPost",
         "ApiGatewayMethodLoginPost",
+        "ApiGatewayMethodConfirmPost",
         "ApiGatewayMethodUploadPost",
         "ApiGatewayMethodAny",
         "ApiGatewayMethodProxyVarAny",
@@ -1604,12 +1855,12 @@
         }
       }
     },
-    "UploadLambdaPermissionApiGateway": {
+    "ConfirmLambdaPermissionApiGateway": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "FunctionName": {
           "Fn::GetAtt": [
-            "UploadLambdaFunction",
+            "ConfirmLambdaFunction",
             "Arn"
           ]
         },
@@ -1641,12 +1892,12 @@
         }
       }
     },
-    "JwtAuthorizerLambdaPermissionApiGateway": {
+    "UploadLambdaPermissionApiGateway": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "FunctionName": {
           "Fn::GetAtt": [
-            "JwtAuthorizerLambdaFunction",
+            "UploadLambdaFunction",
             "Arn"
           ]
         },
@@ -1914,9 +2165,13 @@
                   "Effect": "Allow",
                   "Action": [
                     "dynamodb:PutItem",
-                    "dynamodb:GetItem"
+                    "dynamodb:GetItem",
+                    "cognito-idp:SignUp"
                   ],
-                  "Resource": "arn:aws:dynamodb:ap-south-1:*:table/dentacare-backend-dev-users"
+                  "Resource": [
+                    "arn:aws:dynamodb:ap-south-1:*:table/dentacare-backend-dev-users",
+                    "arn:aws:cognito-idp:ap-south-1:607360609414:userpool/*"
+                  ]
                 }
               ]
             }
@@ -1990,9 +2245,13 @@
                 {
                   "Effect": "Allow",
                   "Action": [
-                    "dynamodb:GetItem"
+                    "dynamodb:GetItem",
+                    "cognito-idp:InitiateAuth"
                   ],
-                  "Resource": "arn:aws:dynamodb:ap-south-1:*:table/dentacare-backend-dev-users"
+                  "Resource": [
+                    "arn:aws:dynamodb:ap-south-1:*:table/dentacare-backend-dev-users",
+                    "arn:aws:cognito-idp:ap-south-1:607360609414:userpool/*"
+                  ]
                 }
               ]
             }
@@ -2006,6 +2265,82 @@
               "dentacare-backend",
               "dev",
               "login",
+              {
+                "Ref": "AWS::Region"
+              },
+              "lambdaRole"
+            ]
+          ]
+        },
+        "ManagedPolicyArns": []
+      }
+    },
+    "ConfirmIamRoleLambdaExecution": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": [
+                  "lambda.amazonaws.com"
+                ]
+              },
+              "Action": [
+                "sts:AssumeRole"
+              ]
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": {
+              "Fn::Join": [
+                "-",
+                [
+                  "dentacare-backend",
+                  "dev",
+                  "lambda"
+                ]
+              ]
+            },
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogStream",
+                    "logs:CreateLogGroup",
+                    "logs:PutLogEvents"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/dentacare-backend-dev-confirm:*:*"
+                    }
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "cognito-idp:ConfirmSignUp"
+                  ],
+                  "Resource": "arn:aws:cognito-idp:ap-south-1:607360609414:userpool/*"
+                }
+              ]
+            }
+          }
+        ],
+        "Path": "/",
+        "RoleName": {
+          "Fn::Join": [
+            "-",
+            [
+              "dentacare-backend",
+              "dev",
+              "confirm",
               {
                 "Ref": "AWS::Region"
               },
@@ -2068,7 +2403,7 @@
                   "Action": [
                     "s3:PutObject"
                   ],
-                  "Resource": "arn:aws:s3:::dentacare-backend-dev-ap-south-1-uploads/*"
+                  "Resource": "arn:aws:s3:::dentacare-backend-dev-uploads-607360609414/*"
                 }
               ]
             }
@@ -2151,6 +2486,75 @@
               "dentacare-backend",
               "dev",
               "jwtAuthorizer",
+              {
+                "Ref": "AWS::Region"
+              },
+              "lambdaRole"
+            ]
+          ]
+        },
+        "ManagedPolicyArns": []
+      }
+    },
+    "RootIamRoleLambdaExecution": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": [
+                  "lambda.amazonaws.com"
+                ]
+              },
+              "Action": [
+                "sts:AssumeRole"
+              ]
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": {
+              "Fn::Join": [
+                "-",
+                [
+                  "dentacare-backend",
+                  "dev",
+                  "lambda"
+                ]
+              ]
+            },
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogStream",
+                    "logs:CreateLogGroup",
+                    "logs:PutLogEvents"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/dentacare-backend-dev-root:*:*"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ],
+        "Path": "/",
+        "RoleName": {
+          "Fn::Join": [
+            "-",
+            [
+              "dentacare-backend",
+              "dev",
+              "root",
               {
                 "Ref": "AWS::Region"
               },
@@ -2287,7 +2691,8 @@
                 {
                   "Effect": "Allow",
                   "Action": [
-                    "dynamodb:PutItem"
+                    "dynamodb:PutItem",
+                    "dynamodb:Scan"
                   ],
                   "Resource": "arn:aws:dynamodb:ap-south-1:*:table/dentacare-backend-dev-appointments"
                 }
@@ -2487,7 +2892,7 @@
     "UploadBucket": {
       "Type": "AWS::S3::Bucket",
       "Properties": {
-        "BucketName": "dentacare-backend-dev-ap-south-1-uploads",
+        "BucketName": "dentacare-backend-dev-uploads-607360609414",
         "CorsConfiguration": {
           "CorsRules": [
             {
@@ -2559,6 +2964,46 @@
         ],
         "BillingMode": "PAY_PER_REQUEST"
       }
+    },
+    "CognitoUserPool": {
+      "Type": "AWS::Cognito::UserPool",
+      "Properties": {
+        "UserPoolName": "dentacare-backend-dev-user-pool",
+        "UsernameAttributes": [
+          "email"
+        ],
+        "AutoVerifiedAttributes": [
+          "email"
+        ],
+        "Policies": {
+          "PasswordPolicy": {
+            "MinimumLength": 8,
+            "RequireUppercase": true,
+            "RequireLowercase": true,
+            "RequireNumbers": true,
+            "RequireSymbols": false
+          }
+        }
+      }
+    },
+    "CognitoUserPoolClient": {
+      "Type": "AWS::Cognito::UserPoolClient",
+      "Properties": {
+        "ClientName": "dentacare-backend-dev-web",
+        "UserPoolId": {
+          "Ref": "CognitoUserPool"
+        },
+        "GenerateSecret": false,
+        "ExplicitAuthFlows": [
+          "ALLOW_USER_PASSWORD_AUTH",
+          "ALLOW_REFRESH_TOKEN_AUTH",
+          "ALLOW_USER_SRP_AUTH"
+        ],
+        "PreventUserExistenceErrors": "ENABLED",
+        "SupportedIdentityProviders": [
+          "COGNITO"
+        ]
+      }
     }
   },
   "Outputs": {
@@ -2573,7 +3018,7 @@
     "SignupLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "SignupLambdaVersionX21KfCcqGTAq3ImDKIg9YbX1WrEwqEVPpE7lwP9ZpM"
+        "Ref": "SignupLambdaVersionTNARS8hkExNtvp1idVzqa1lRPoTr5SuoDjnSgn8o"
       },
       "Export": {
         "Name": "sls-dentacare-backend-dev-SignupLambdaFunctionQualifiedArn"
@@ -2582,16 +3027,25 @@
     "LoginLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "LoginLambdaVersionuB28MDozwe5VC8ZnL6DBomSOBGXl716l1t0UMHDE1g"
+        "Ref": "LoginLambdaVersiond4p7aYtMoveXNDeklIXvXSziDXs6DlDIlxIpvkTGadw"
       },
       "Export": {
         "Name": "sls-dentacare-backend-dev-LoginLambdaFunctionQualifiedArn"
       }
     },
+    "ConfirmLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "ConfirmLambdaVersionNzTe5O3LQZ3CrMGySfpt7RhBKPHUboPYZ8LlXsPTk"
+      },
+      "Export": {
+        "Name": "sls-dentacare-backend-dev-ConfirmLambdaFunctionQualifiedArn"
+      }
+    },
     "UploadLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "UploadLambdaVersionhMg12FnhbxxzIp8FVdwLtfS11eSfY8YxmcAZDs2bL5Q"
+        "Ref": "UploadLambdaVersion4po2nq6BH9xZdYemM3lkkwZB6jM4ZirE6FlWhmBrRk"
       },
       "Export": {
         "Name": "sls-dentacare-backend-dev-UploadLambdaFunctionQualifiedArn"
@@ -2600,7 +3054,7 @@
     "JwtAuthorizerLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "JwtAuthorizerLambdaVersionsy2T6tvyVbHgrZeyrOm5QOuEJgypNcZa8hrCD6v8"
+        "Ref": "JwtAuthorizerLambdaVersiongT4Ds3tQpbEZnxcjsnxE5thhVQcOY72JCDhUsZkmB8"
       },
       "Export": {
         "Name": "sls-dentacare-backend-dev-JwtAuthorizerLambdaFunctionQualifiedArn"
@@ -2609,7 +3063,7 @@
     "RootLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "RootLambdaVersionHfCXRN9hsaXrYzFiZCW9eiFiyUKenGbOnQT72tqTaE"
+        "Ref": "RootLambdaVersiongq160wNpxqxdlGmcKTNda8nHYySum5M7ikD6rtTQ"
       },
       "Export": {
         "Name": "sls-dentacare-backend-dev-RootLambdaFunctionQualifiedArn"
@@ -2618,7 +3072,7 @@
     "ListAppointmentsLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "ListAppointmentsLambdaVersionWdSTVFkr5UvU0qtGYQlV7eL4gorEKy70e2cfsyVNG0"
+        "Ref": "ListAppointmentsLambdaVersionZVGF0oCIh0Jqu96cIRn3ni9QAC7lhVsKYkTno08XpA"
       },
       "Export": {
         "Name": "sls-dentacare-backend-dev-ListAppointmentsLambdaFunctionQualifiedArn"
@@ -2627,7 +3081,7 @@
     "CreateAppointmentLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "CreateAppointmentLambdaVersiongpmba8YGiMmT5c1XgHkOwwyM3EmdWKyeQkcQ9ZA8"
+        "Ref": "CreateAppointmentLambdaVersionncLru8M5IN6uEbWFyAe8RvNgHLtDDixFTt2kbGlb0"
       },
       "Export": {
         "Name": "sls-dentacare-backend-dev-CreateAppointmentLambdaFunctionQualifiedArn"
@@ -2636,7 +3090,7 @@
     "DeleteAppointmentLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "DeleteAppointmentLambdaVersionN6Ai9ucDKHhA5Jj5J2W1EVRKJGuRXb3kHzJZcrPTKbc"
+        "Ref": "DeleteAppointmentLambdaVersionpjC0D4ohillE5iVkpQFn2Eeyb70VQlSTSxjcKpag"
       },
       "Export": {
         "Name": "sls-dentacare-backend-dev-DeleteAppointmentLambdaFunctionQualifiedArn"
@@ -2645,7 +3099,7 @@
     "ContactSubmitLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "ContactSubmitLambdaVersionxtnfc66kPxO4NUVIsAodpTQKvyelONDfRKtZnwAyKc"
+        "Ref": "ContactSubmitLambdaVersionsyjR27tnA5qs0SUyY6PgmjrfTvvGGUwM9IK4srrS90"
       },
       "Export": {
         "Name": "sls-dentacare-backend-dev-ContactSubmitLambdaFunctionQualifiedArn"
@@ -2681,7 +3135,17 @@
       "Value": "dentacare-backend-dev-users"
     },
     "UploadBucketName": {
-      "Value": "dentacare-backend-dev-ap-south-1-uploads"
+      "Value": "dentacare-backend-dev-uploads-607360609414"
+    },
+    "CognitoUserPoolId": {
+      "Value": {
+        "Ref": "CognitoUserPool"
+      }
+    },
+    "CognitoUserPoolClientId": {
+      "Value": {
+        "Ref": "CognitoUserPoolClient"
+      }
     }
   }
 }

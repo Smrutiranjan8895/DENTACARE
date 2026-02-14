@@ -20,9 +20,10 @@
     <!-- CREATE -->
     <div class="card">
       <h2>Add Appointment</h2>
-      <input type="text" id="name" placeholder="Patient Name" />
-      <input type="date" id="date" />
-      <input type="text" id="service" placeholder="Service" />
+      <input type="text" id="name" placeholder="Patient Name" required />
+      <input type="date" id="date" required />
+      <input type="time" id="time" required />
+      <input type="text" id="service" placeholder="Service" required />
       <button class="btn primary" onclick="addAppointment()">Add</button>
     </div>
 
@@ -33,6 +34,7 @@
     </div>
   </section>
 
+  <script src="env.js"></script>
   <script src="config.js"></script>
   <script src="api.js"></script>
   <script src="dashboard.js"></script>

@@ -41,7 +41,13 @@ function toggleFAQ(button) {
 
 // Alerts
 function bookNow() {
-  alert("✅ Appointment Booked Successfully! Our team will contact you soon. 😊");
+  const token = localStorage.getItem('idToken') || localStorage.getItem('authToken');
+  const next = 'dashboard.html';
+  if (!token) {
+    window.location.href = `auth.html?next=${encodeURIComponent(next)}`;
+    return;
+  }
+  window.location.href = next;
 }
 
 function showOffer() {

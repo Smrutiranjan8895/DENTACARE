@@ -1,6 +1,6 @@
-// Protect route
+// Protect route and keep return target
 if (!isAuthenticated()) {
-  window.location.href = "auth.html";
+  window.location.href = `auth.html?next=${encodeURIComponent('dashboard.html')}`;
 }
 
 // Display user info
@@ -34,7 +34,7 @@ async function loadAppointments() {
       data.appointments.forEach(apt => {
         const li = document.createElement("li");
         li.innerHTML = `
-          <span>${apt.name} | ${apt.date} | ${apt.service}</span>
+          <span>${apt.name} | ${apt.date}${apt.time ? ' ' + apt.time : ''} | ${apt.service}</span>
           <button class="btn-delete" onclick="deleteAppointment('${apt.id}')">Delete</button>
         `;
         list.appendChild(li);
@@ -50,12 +50,25 @@ async function loadAppointments() {
 
 // Add appointment
 async function addAppointment() {
-  const name = document.getElementById("name").value;
+  const name = document.getElementById("name").value.trim();
   const date = document.getElementById("date").value;
-  const service = document.getElementById("service").value;
+  const time = document.getElementById("time").value;
+  const service = document.getElementById("service").value.trim();
 
-  if (!name || !date || !service) {
-    alert("Fill all fields");
+  if (!name) {
+    alert("Please enter a name");
+    return;
+  }
+  if (!date) {
+    alert("Please select a date");
+    return;
+  }
+  if (!time) {
+    alert("Please select a time");
+    return;
+  }
+  if (!service) {
+    alert("Please enter a service");
     return;
   }
 
@@ -66,12 +79,13 @@ async function addAppointment() {
 
     await apiRequest(getEndpoint('APPOINTMENTS'), {
       method: 'POST',
-      body: JSON.stringify({ name, date, service })
+      body: JSON.stringify({ name, date, time, service })
     });
 
     document.getElementById("name").value = "";
     document.getElementById("date").value = "";
     document.getElementById("service").value = "";
+    document.getElementById("time").value = "";
 
     btn.disabled = false;
     btn.textContent = "Add";

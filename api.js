@@ -2,7 +2,7 @@
 
 // Make authenticated API request
 async function apiRequest(endpoint, options = {}) {
-  const token = localStorage.getItem('authToken');
+  const token = localStorage.getItem('idToken') || localStorage.getItem('authToken');
   
   const headers = {
     'Content-Type': 'application/json',
@@ -33,20 +33,32 @@ async function apiRequest(endpoint, options = {}) {
 }
 
 // Auth helpers
-function saveAuth(token, email) {
-  localStorage.setItem('authToken', token);
-  localStorage.setItem('userEmail', email);
+function saveAuth(tokens, email) {
+  if (tokens?.idToken) {
+    localStorage.setItem('idToken', tokens.idToken);
+    localStorage.setItem('authToken', tokens.idToken); // backward compat
+  }
+  if (tokens?.accessToken) {
+    localStorage.setItem('accessToken', tokens.accessToken);
+  }
+  if (tokens?.refreshToken) {
+    localStorage.setItem('refreshToken', tokens.refreshToken);
+  }
+  localStorage.setItem('userEmail', email || '');
   localStorage.setItem('loggedIn', 'true');
 }
 
 function clearAuth() {
+  localStorage.removeItem('idToken');
   localStorage.removeItem('authToken');
+  localStorage.removeItem('accessToken');
+  localStorage.removeItem('refreshToken');
   localStorage.removeItem('userEmail');
   localStorage.removeItem('loggedIn');
 }
 
 function isAuthenticated() {
-  return !!localStorage.getItem('authToken');
+  return !!(localStorage.getItem('idToken') || localStorage.getItem('authToken'));
 }
 
 function getUserEmail() {
